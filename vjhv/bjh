@@ -3,7 +3,7 @@ info:
   version: 9898
   title: ibiubiub
 servers:
-  - url: 'http://localhost:3000'mm
+  - url: 'http://localhost:3000'
 paths:
   /user:
     get:
