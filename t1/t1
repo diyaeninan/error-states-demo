@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: fwef
+  version: fwef gr
   title: weg
 servers:
   - url: 'http://localhost:3000'
