@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 9898
+  version: 9898hrtgh
   title: ibiubiub
 servers:
   - url: 'http://localhost:3000'
