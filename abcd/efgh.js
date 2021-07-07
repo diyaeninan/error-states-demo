@@ -1506,6 +1506,406 @@
                     }
                 }
             }
+        },
+        "/schemas": {
+            "get": {
+                "tags": [
+                    "External Endpoint",
+                    "CRUD Endpoint"
+                ],
+                "summary": "Get schema by workspace Id",
+                "description": "This API is used to get all the schema for a particular workspace.",
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "query",
+                        "description": "This is a workspace ID for which all the schema have to be filtered.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "{{workspace_id}}"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "This is used to get the latest schema of an API. The only value it can take is latest",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "latest"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "This is the type of the schema (eg. - openapi3, openapi2) for which schema needs to be filtered."
+                        },
+                        "example": "openapi3"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "model_id": {
+                                                "$ref": "#/components/schemas/Model_Id"
+                                            },
+                                            "meta": {
+                                                "$ref": "#/components/schemas/Meta"
+                                            },
+                                            "data": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "$ref": "#/components/schemas/VersionId"
+                                                    },
+                                                    "api": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "string",
+                                                                "format": "uuid",
+                                                                "maxLength": 40,
+                                                                "description": "Unique id belonging to a particular API."
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "Name of the API"
+                                                            }
+                                                        }
+                                                    },
+                                                    "apiVersion": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "$ref": "#/components/schemas/ApiVersionId"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "Name of the API version."
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "model_id": "89fab175-b611-4644-b527-95a097257346",
+                                        "meta": {
+                                            "model": "schema",
+                                            "action": "getforworkspace"
+                                        },
+                                        "data": {
+                                            "id": "89fab175-b611-4644-b527-95a097257346",
+                                            "api": {
+                                                "id": "27f4bb03-8708-437f-8546-ba7b55a07661",
+                                                "name": "My new API"
+                                            },
+                                            "apiVersion": {
+                                                "id": "978cecf0-3d46-4bc1-bff8-8105a75af346",
+                                                "name": "Draft"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "model_id": "a82df40d-3da2-48c9-adc5-9fbf06d94b80",
+                                        "meta": {
+                                            "model": "schema",
+                                            "action": "getforworkspace"
+                                        },
+                                        "data": {
+                                            "id": "a82df40d-3da2-48c9-adc5-9fbf06d94b80",
+                                            "api": {
+                                                "id": "675d5d67-30e1-4b22-985d-84c913d1b773",
+                                                "name": "xyz"
+                                            },
+                                            "apiVersion": {
+                                                "id": "74c96f22-60f3-44ea-959a-20027f72a86f",
+                                                "name": "1.0.0"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "name": "paramMissingError",
+                                        "message": "Parameter is missing in the request.",
+                                        "details": {
+                                            "param": "workspace"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "name": "instanceNotFoundError",
+                                        "message": "We could not find the workspace you are looking for",
+                                        "details": {
+                                            "model": "workspace",
+                                            "model_id": "66",
+                                            "owner": "14997099"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "name": "serverError",
+                                        "message": "Something went wrong with the server.",
+                                        "details": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schemas": {
+            "get": {
+                "tags": [
+                    "External Endpoint",
+                    "CRUD Endpoint"
+                ],
+                "summary": "Get schema by workspace Id",
+                "description": "This API is used to get all the schema for a particular workspace.",
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "query",
+                        "description": "This is a workspace ID for which all the schema have to be filtered.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "{{workspace_id}}"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "This is used to get the latest schema of an API. The only value it can take is latest",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "latest"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "This is the type of the schema (eg. - openapi3, openapi2) for which schema needs to be filtered."
+                        },
+                        "example": "openapi3"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "model_id": {
+                                                "$ref": "#/components/schemas/Model_Id"
+                                            },
+                                            "meta": {
+                                                "$ref": "#/components/schemas/Meta"
+                                            },
+                                            "data": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "$ref": "#/components/schemas/VersionId"
+                                                    },
+                                                    "api": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "string",
+                                                                "format": "uuid",
+                                                                "maxLength": 40,
+                                                                "description": "Unique id belonging to a particular API."
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "Name of the API"
+                                                            }
+                                                        }
+                                                    },
+                                                    "apiVersion": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "$ref": "#/components/schemas/ApiVersionId"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "Name of the API version."
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "model_id": "89fab175-b611-4644-b527-95a097257346",
+                                        "meta": {
+                                            "model": "schema",
+                                            "action": "getforworkspace"
+                                        },
+                                        "data": {
+                                            "id": "89fab175-b611-4644-b527-95a097257346",
+                                            "api": {
+                                                "id": "27f4bb03-8708-437f-8546-ba7b55a07661",
+                                                "name": "My new API"
+                                            },
+                                            "apiVersion": {
+                                                "id": "978cecf0-3d46-4bc1-bff8-8105a75af346",
+                                                "name": "Draft"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "model_id": "a82df40d-3da2-48c9-adc5-9fbf06d94b80",
+                                        "meta": {
+                                            "model": "schema",
+                                            "action": "getforworkspace"
+                                        },
+                                        "data": {
+                                            "id": "a82df40d-3da2-48c9-adc5-9fbf06d94b80",
+                                            "api": {
+                                                "id": "675d5d67-30e1-4b22-985d-84c913d1b773",
+                                                "name": "xyz"
+                                            },
+                                            "apiVersion": {
+                                                "id": "74c96f22-60f3-44ea-959a-20027f72a86f",
+                                                "name": "1.0.0"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "name": "paramMissingError",
+                                        "message": "Parameter is missing in the request.",
+                                        "details": {
+                                            "param": "workspace"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "name": "instanceNotFoundError",
+                                        "message": "We could not find the workspace you are looking for",
+                                        "details": {
+                                            "model": "workspace",
+                                            "model_id": "66",
+                                            "owner": "14997099"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "error": {
+                                        "name": "serverError",
+                                        "message": "Something went wrong with the server.",
+                                        "details": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
